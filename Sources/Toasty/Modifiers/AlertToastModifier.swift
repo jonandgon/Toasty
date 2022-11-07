@@ -9,7 +9,9 @@
 import Foundation
 import SwiftUI
 
-public struct AlertToastModifier: ViewModifier {
+public struct AlertToastModifier<T: Toast>: ViewModifier {
+    
+    typealias AlertClosure<T> = () -> T
     
     // MARK: - Properties
     
@@ -29,9 +31,9 @@ public struct AlertToastModifier: ViewModifier {
     
     // MARK: Closures
     
-    /// Block which is expected to return an ``AlertToast`` view.
+    /// Block which is expected to return a ``Toast`` view.
     ///
-    var alert: () -> AlertToast
+    var alert: AlertClosure<T>
     
     var onTap: (() -> ())? = nil
     
@@ -56,6 +58,24 @@ public struct AlertToastModifier: ViewModifier {
     
     private var offset: CGFloat {
         return -hostRect.midY + alertRect.height
+    }
+    
+    init(
+        isPresenting: Binding<Bool>,
+        duration: Double = 2,
+        tapToDismiss: Bool = true,
+        offsetY: CGFloat = 0,
+        alert: @escaping AlertClosure<T>,
+        onTap: (() -> ())? = nil,
+        completion: (() -> ())? = nil
+    ) {
+        self._isPresenting = isPresenting
+        self.duration = duration
+        self.tapToDismiss = tapToDismiss
+        self.offsetY = offsetY
+        self.alert = alert
+        self.onTap = onTap
+        self.completion = completion
     }
     
     // MARK: - Entry Point

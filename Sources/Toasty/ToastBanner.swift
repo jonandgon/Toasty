@@ -8,39 +8,30 @@
 
 import SwiftUI
 
-struct ToastBanner: View {
+public struct ToastBanner: Toast {
     
-    /// The type content to display in the alert. Can be any ``AlertType``.
-    ///
-    var type: AlertType
+    public var displayMode: DisplayMode {
+        return .banner(.pop)
+    }
     
-    /// The title of the alert. *Optional*.
-    ///
-    var title: String? = nil
+    public var type: AlertType
+    public var title: String? = nil
+    public var subtitle: String? = nil
+    public var style: AlertStyle? = nil
     
-    /// The subtitle of the alert. *Optional*.
-    ///
-    var subTitle: String? = nil
-    
-    /// The appearance of the alert. Can be any ``AlertStyle``.
-    ///
-    var style: AlertStyle? = nil
-    
-    /// Initialize a new ``ToastBanner`` object.
-    ///
-    init(
+    public init(
         type: AlertType,
         title: String? = nil,
-        subTitle: String? = nil,
+        subtitle: String? = nil,
         style: AlertStyle? = nil
     ) {
         self.type = type
         self.title = title
-        self.subTitle = subTitle
+        self.subtitle = subtitle
         self.style = style
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             Spacer()
             
@@ -51,8 +42,8 @@ struct ToastBanner: View {
                         .font(style?.titleFont ?? Font.headline.bold())
                 }
                 
-                if subTitle != nil {
-                    Text(LocalizedStringKey(subTitle!))
+                if subtitle != nil {
+                    Text(LocalizedStringKey(subtitle!))
                         .font(style?.subTitleFont ?? Font.subheadline)
                         .lineLimit(2)
                         .truncationMode(.tail)
@@ -94,12 +85,12 @@ struct ToastBanner_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack {
-            ToastBanner(type: .regular, title: "Generic Title", subTitle: "A longer generic subtitle.", style: AlertStyle(backgroundColor: Color(.systemYellow), titleColor: Color.white, subTitleColor: Color.white.opacity(0.8)))
+            ToastBanner(type: .regular, title: "Generic Title", subtitle: "A longer generic subtitle.", style: AlertStyle(backgroundColor: Color(.systemYellow), titleColor: Color.white, subTitleColor: Color.white.opacity(0.8)))
                 .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 0)
-            ToastBanner(type: .complete(Color(.systemGreen)), title: "Successfully Uploaded", subTitle: "Your content was successfully uploaded.")
-            ToastBanner(type: .loading, title: "Preparing to Upload", subTitle: "Your content is being processed for upload.")
-            ToastBanner(type: .error(Color(.systemRed)), title: "Failed to Upload", subTitle: "Your content failed to upload to the network.")
-            ToastBanner(type: .systemImage("bolt.horizontal.fill", Color.yellow), title: "No Internet Connection", subTitle: "Unable to connect to the network. Please check your connection and try again.")
+            ToastBanner(type: .complete(Color(.systemGreen)), title: "Successfully Uploaded", subtitle: "Your content was successfully uploaded.")
+            ToastBanner(type: .loading, title: "Preparing to Upload", subtitle: "Your content is being processed for upload.")
+            ToastBanner(type: .error(Color(.systemRed)), title: "Failed to Upload", subtitle: "Your content failed to upload to the network.")
+            ToastBanner(type: .systemImage("bolt.horizontal.fill", Color.yellow), title: "No Internet Connection", subtitle: "Unable to connect to the network. Please check your connection and try again.")
         }
     }
     

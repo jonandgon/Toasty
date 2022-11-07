@@ -8,43 +8,34 @@
 
 import SwiftUI
 
-struct ToastHUD: View {
+public struct ToastHUD: Toast {
     
-    /// The type content to display in the alert. Can be any ``AlertType``.
-    ///
-    var type: AlertType
+    public var displayMode: DisplayMode {
+        return .hud
+    }
     
-    /// The title of the alert. *Optional*.
-    ///
-    var title: String? = nil
+    public var type: AlertType
+    public var title: String? = nil
+    public var subtitle: String? = nil
+    public var style: AlertStyle? = nil
     
-    /// The subtitle of the alert. *Optional*.
-    ///
-    var subTitle: String? = nil
-    
-    /// The appearance of the alert. Can be any ``AlertStyle``.
-    ///
-    var style: AlertStyle? = nil
-    
-    /// Initialize a new ``ToastBanner`` object.
-    ///
-    init(
+    public init(
         type: AlertType,
         title: String? = nil,
-        subTitle: String? = nil,
+        subtitle: String? = nil,
         style: AlertStyle? = nil
     ) {
         self.type = type
         self.title = title
-        self.subTitle = subTitle
+        self.subtitle = subtitle
         self.style = style
     }
     
-    var body: some View {
+    public var body: some View {
         Group {
             HStack(spacing: 16) {
                 iconComponent()
-                if title != nil || subTitle != nil {
+                if title != nil || subtitle != nil {
                     VStack(alignment: type == .regular ? .center : .leading, spacing: 2) {
                         titleComponent()
                         subtitleComponent()
@@ -100,8 +91,8 @@ struct ToastHUD: View {
     }
     
     @ViewBuilder func subtitleComponent() -> some View {
-        if subTitle != nil {
-            Text(LocalizedStringKey(subTitle ?? ""))
+        if subtitle != nil {
+            Text(LocalizedStringKey(subtitle ?? ""))
                 .font(style?.subTitleFont ?? Font.footnote)
                 .opacity(0.7)
                 .multilineTextAlignment(.leading)
@@ -118,10 +109,10 @@ struct ToastHUD_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack {
-            ToastHUD(type: .regular, title: "Title", subTitle: "Subtitle")
-            ToastHUD(type: .error(Color(.systemRed)), title: "Error", subTitle: "Something went wrong.", style: .none)
-            ToastHUD(type: .complete(Color(.systemGreen)), title: "Success", subTitle: "Something completed successfully.", style: .none)
-            ToastHUD(type: .systemImage("map.fill", Color(.systemCyan)), title: "This is a silly Toast HUD", subTitle: "Ooh here's some longer content down here which might be truncated, but we can't really be sure if it will be.", style: .none)
+            ToastHUD(type: .regular, title: "Title", subtitle: "Subtitle")
+            ToastHUD(type: .error(Color(.systemRed)), title: "Error", subtitle: "Something went wrong.", style: .none)
+            ToastHUD(type: .complete(Color(.systemGreen)), title: "Success", subtitle: "Something completed successfully.", style: .none)
+            ToastHUD(type: .systemImage("map.fill", Color(.systemCyan)), title: "This is a silly Toast HUD", subtitle: "Ooh here's some longer content down here which might be truncated, but we can't really be sure if it will be.", style: .none)
         }
     }
     

@@ -10,16 +10,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-// @available(iOS 13, macOS 11, *)
 public extension View {
-    
-    /// Return a view with a maximum specific frame.
-    ///
-    /// Defaults to a maximum of frame of 175 x 175.
-    ///
-    internal func withFrame(_ withFrame: Bool) -> some View {
-        modifier(WithFrameModifier(withFrame: withFrame))
-    }
     
     /// Present an ``AlertToast/AlertToast``.
     ///
@@ -34,7 +25,7 @@ public extension View {
         duration: Double = 2,
         tapToDismiss: Bool = true,
         offsetY: CGFloat = 0,
-        alert: @escaping () -> AlertToast,
+        alert: @escaping () -> some Toast,
         onTap: (() -> ())? = nil,
         completion: (() -> ())? = nil
     ) -> some View {
@@ -47,6 +38,14 @@ public extension View {
             onTap: onTap,
             completion: completion
         ))
+    }
+    
+    /// Return a view with a maximum specific frame.
+    ///
+    /// Defaults to a maximum of frame of 175 x 175.
+    ///
+    internal func withFrame(_ withFrame: Bool) -> some View {
+        modifier(WithFrameModifier(withFrame: withFrame))
     }
     
     /// Set the ``AlertToast/AlertToast`` background.
@@ -68,8 +67,7 @@ public extension View {
         modifier(TextForegroundModifier(color: color))
     }
     
-    @ViewBuilder
-    internal func valueChanged<T: Equatable>(value: T, onChange: @escaping (T) -> Void) -> some View {
+    @ViewBuilder internal func valueChanged<T: Equatable>(value: T, onChange: @escaping (T) -> Void) -> some View {
         if #available(iOS 14.0, *) {
             self.onChange(of: value, perform: onChange)
         } else {

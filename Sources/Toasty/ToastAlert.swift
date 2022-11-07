@@ -8,40 +8,30 @@
 
 import SwiftUI
 
-struct ToastAlert: View {
+public struct ToastAlert: Toast {
     
-    /// The type content to display in the alert. Can be any ``AlertType``.
-    ///
-    var type: AlertType
+    public var displayMode: DisplayMode {
+        return .alert
+    }
     
-    /// The title of the alert. *Optional*.
-    ///
-    var title: String? = nil
+    public var type: AlertType
+    public var title: String? = nil
+    public var subtitle: String? = nil
+    public var style: AlertStyle? = nil
     
-    /// The subtitle of the alert. *Optional*.
-    ///
-    var subTitle: String? = nil
-    
-    /// The appearance of the alert. Can be any ``AlertStyle``.
-    ///
-    var style: AlertStyle? = nil
-    
-    /// Initialize a new ``ToastBanner`` object.
-    ///
-    init(
+    public init(
         type: AlertType,
         title: String? = nil,
-        subTitle: String? = nil,
+        subtitle: String? = nil,
         style: AlertStyle? = nil
     ) {
         self.type = type
         self.title = title
-        self.subTitle = subTitle
+        self.subtitle = subtitle
         self.style = style
     }
     
-    
-    var body: some View {
+    public var body: some View {
         VStack {
             iconComponent()
             VStack(spacing: type == .regular ? 8 : 2) {
@@ -51,8 +41,8 @@ struct ToastAlert: View {
                         .multilineTextAlignment(.center)
                         .textColor(style?.titleColor ?? nil)
                 }
-                if subTitle != nil {
-                    Text(LocalizedStringKey(subTitle ?? ""))
+                if subtitle != nil {
+                    Text(LocalizedStringKey(subtitle ?? ""))
                         .font(style?.subTitleFont ?? Font.footnote)
                         .opacity(0.7)
                         .multilineTextAlignment(.center)
@@ -109,9 +99,9 @@ struct ToastAlert_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack {
-            ToastAlert(type: .regular, title: "Generic Title", subTitle: "Generic longer subtitle content.")
-            ToastAlert(type: .error(Color(.systemRed)), title: "Error", subTitle: "Something went wrong.", style: .none)
-            ToastAlert(type: .complete(Color(.systemGreen)), title: "Success", subTitle: "Something completed successfully.", style: .none)
+            ToastAlert(type: .regular, title: "Generic Title", subtitle: "Generic longer subtitle content.")
+            ToastAlert(type: .error(Color(.systemRed)), title: "Error", subtitle: "Something went wrong.", style: .none)
+            ToastAlert(type: .complete(Color(.systemGreen)), title: "Success", subtitle: "Something completed successfully.", style: .none)
         }
     }
     
