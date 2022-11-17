@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-/// View Modifier to change foreground text color on ``AlertToast/AlertToast``
+/// View Modifier to change foreground text color on ``Toast``
 /// objects.
 ///
 internal struct TextForegroundModifier: ViewModifier {

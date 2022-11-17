@@ -1,5 +1,5 @@
 //
-//  AlertToastModifier.swift
+//  ToastModifier.swift
 //  Toasty
 //
 //  Created by Sam Spencer on 11/7/22.
@@ -9,9 +9,9 @@
 import Foundation
 import SwiftUI
 
-public struct AlertToastModifier<T: Toast>: ViewModifier {
+public struct ToastModifier<T: Toast>: ViewModifier {
     
-    typealias AlertClosure<T> = () -> T
+    typealias ToastClosure<T> = () -> T
     
     // MARK: - Properties
     
@@ -33,7 +33,7 @@ public struct AlertToastModifier<T: Toast>: ViewModifier {
     
     /// Block which is expected to return a ``Toast`` view.
     ///
-    var alert: AlertClosure<T>
+    var alert: ToastClosure<T>
     
     var onTap: (() -> ())? = nil
     
@@ -65,7 +65,7 @@ public struct AlertToastModifier<T: Toast>: ViewModifier {
         duration: Double = 2,
         tapToDismiss: Bool = true,
         offsetY: CGFloat = 0,
-        alert: @escaping AlertClosure<T>,
+        alert: @escaping ToastClosure<T>,
         onTap: (() -> ())? = nil,
         completion: (() -> ())? = nil
     ) {
@@ -76,6 +76,20 @@ public struct AlertToastModifier<T: Toast>: ViewModifier {
         self.alert = alert
         self.onTap = onTap
         self.completion = completion
+    }
+    
+    init(from queueItem: ToastQueueItem, for toastType: T.Type) {
+        self._isPresenting = Binding(projectedValue: .constant(true))
+        self.duration = queueItem.duration
+        self.tapToDismiss = queueItem.allowsDismiss
+        self.offsetY = queueItem.offsetY
+        self.alert = {
+            return queueItem.toast as! T
+        }
+        self.onTap = nil
+        self.completion = {
+            Toaster.shared.dismiss()
+        }
     }
     
     // MARK: - Entry Point

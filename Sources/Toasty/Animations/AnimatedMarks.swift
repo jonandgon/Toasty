@@ -12,7 +12,7 @@ internal struct AnimatedCheckmark: View {
     
     /// Checkmark color
     ///
-    var color: Color = .black
+    var color: Color = Color(.label)
     
     /// Checkmark color
     ///

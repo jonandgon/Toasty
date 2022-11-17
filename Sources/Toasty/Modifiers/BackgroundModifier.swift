@@ -9,9 +9,8 @@
 import Foundation
 import SwiftUI
 
-/// View Modifier to change the ``AlertToast/AlertToast`` background.
+/// View Modifier to change the ``Toast`` background.
 ///
-@available(iOS 13, macOS 11, *)
 internal struct BackgroundModifier: ViewModifier {
     
     var color: Color?

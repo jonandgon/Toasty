@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-/// Customize certain aspects of an ``AlertToast/AlertToast``'s appearance.
+/// Customize certain aspects of an ``Toast``'s appearance.
 ///
 public struct AlertStyle {
     

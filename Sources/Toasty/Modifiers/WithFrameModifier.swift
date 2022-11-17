@@ -9,9 +9,8 @@
 import Foundation
 import SwiftUI
 
-/// View Modifier for dynamic frame when ``AlertToast/AlertToast/AlertType`` is
-/// ``AlertToast/AlertToast/AlertType/regular`` or
-/// ``AlertToast/AlertToast/AlertType/loading``.
+/// View Modifier for dynamic frame when ``AlertType`` is ``AlertType/regular`` or
+/// ``AlertType/loading``.
 ///
 internal struct WithFrameModifier: ViewModifier {
     

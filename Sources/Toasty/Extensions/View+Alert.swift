@@ -12,13 +12,13 @@ import SwiftUI
 
 public extension View {
     
-    /// Present an ``AlertToast/AlertToast``.
+    /// Present a ``Toast``.
     ///
     /// - parameter show: A `Binding` to toggle and respond to presenation changes.
     /// - parameter duration: The number of seconds to display the toast.
-    /// - parameter alert: A closure which supplies a custom ``AlertToast/AlertToast``.
+    /// - parameter alert: A closure which supplies a custom ``Toast``.
     ///
-    /// - returns: An ``AlertToast/AlertToast`` view.
+    /// - returns: `some` ``Toast`` view.
     ///
     func toast(
         isPresenting: Binding<Bool>,
@@ -29,7 +29,7 @@ public extension View {
         onTap: (() -> ())? = nil,
         completion: (() -> ())? = nil
     ) -> some View {
-        modifier(AlertToastModifier(
+        modifier(ToastModifier(
             isPresenting: isPresenting,
             duration: duration,
             tapToDismiss: tapToDismiss,
@@ -48,10 +48,10 @@ public extension View {
         modifier(WithFrameModifier(withFrame: withFrame))
     }
     
-    /// Set the ``AlertToast/AlertToast`` background.
+    /// Set the ``Toast`` background.
     ///
     /// - parameter color: An optional color. If `nil`, uses a background `Material`.
-    /// - returns: An ``AlertToast/AlertToast`` with a background.
+    /// - returns: A ``Toast`` with a background.
     ///
     internal func alertBackground(_ color: Color? = nil) -> some View {
         modifier(BackgroundModifier(color: color))
@@ -61,7 +61,7 @@ public extension View {
     ///
     /// - parameter color: An optional color. If `nil`, uses `.black`/`.white` depending
     ///   on the system theme.
-    /// - returns: An ``AlertToast/AlertToast`` with updated text color.
+    /// - returns: A ``Toast`` with updated text color.
     ///
     internal func textColor(_ color: Color? = nil) -> some View {
         modifier(TextForegroundModifier(color: color))
