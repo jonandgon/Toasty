@@ -78,20 +78,6 @@ public struct ToastModifier<T: Toast>: ViewModifier {
         self.completion = completion
     }
     
-    init(from queueItem: ToastQueueItem, for toastType: T.Type) {
-        self._isPresenting = Binding(projectedValue: .constant(true))
-        self.duration = queueItem.duration
-        self.tapToDismiss = queueItem.allowsDismiss
-        self.offsetY = queueItem.offsetY
-        self.alert = {
-            return queueItem.toast as! T
-        }
-        self.onTap = nil
-        self.completion = {
-            Toaster.shared.dismiss()
-        }
-    }
-    
     // MARK: - Entry Point
     
     @ViewBuilder public func body(content: Content) -> some View {
@@ -104,7 +90,7 @@ public struct ToastModifier<T: Toast>: ViewModifier {
                     }
                     .animation(Animation.spring(), value: isPresenting)
                 }
-                .valueChanged(value: isPresenting) { (presented) in
+                .onChange(of: isPresenting) { (presented) in
                     if presented {
                         onAppearAction()
                     }
@@ -133,7 +119,7 @@ public struct ToastModifier<T: Toast>: ViewModifier {
                         .animation(Animation.spring(), value: isPresenting)
                     }
                 }
-                .valueChanged(value: isPresenting) { presented in
+                .onChange(of: isPresenting) { presented in
                     if presented {
                         onAppearAction()
                     }
@@ -148,7 +134,7 @@ public struct ToastModifier<T: Toast>: ViewModifier {
                     .edgesIgnoringSafeArea(.all)
                     .animation(Animation.spring(), value: isPresenting)
                 }
-                .valueChanged(value: isPresenting) { presented in
+                .onChange(of: isPresenting) { presented in
                     if presented {
                         onAppearAction()
                     }
@@ -161,88 +147,37 @@ public struct ToastModifier<T: Toast>: ViewModifier {
     @ViewBuilder public func main() -> some View {
         if isPresenting {
             switch alert().displayMode {
-            case .alert: mainAlertContent()
-            case .hud: mainHUDContent()
-            case .banner: mainBannerContent()
+            case .alert:
+                ToastAlertModifier(
+                    alert() as! ToastAlert,
+                    isPresenting: $isPresenting,
+                    workItem: $workItem,
+                    tapToDismiss: tapToDismiss,
+                    onTap: onTap,
+                    completion: completion
+                )
+            case .hud:
+                ToastHUDModifier(
+                    alert() as! ToastHUD,
+                    isPresenting: $isPresenting,
+                    workItem: $workItem,
+                    alertRect: $alertRect,
+                    tapToDismiss: tapToDismiss,
+                    onTap: onTap,
+                    completion: completion
+                )
+            case .banner:
+                ToastBannerModifier(
+                    alert() as! ToastBanner,
+                    isPresenting: $isPresenting,
+                    workItem: $workItem,
+                    tapToDismiss: tapToDismiss,
+                    onTap: onTap,
+                    completion: completion
+                )
             }
         }
     }
-    
-    @ViewBuilder private func mainAlertContent() -> some View {
-        alert()
-            .onTapGesture {
-                onTap?()
-                if tapToDismiss {
-                    withAnimation(.spring()) {
-                        self.workItem?.cancel()
-                        isPresenting = false
-                        self.workItem = nil
-                    }
-                }
-            }
-            .onDisappear {
-                completion?()
-            }
-            .transition(
-                .scale(scale: 0.8)
-                .combined(with: .opacity)
-            )
-    }
-    
-    @ViewBuilder private func mainHUDContent() -> some View {
-        alert()
-            .overlay(
-                GeometryReader { geo -> AnyView in
-                    let rect = geo.frame(in: .global)
-                    if rect.integral != alertRect.integral {
-                        DispatchQueue.main.async {
-                            self.alertRect = rect
-                        }
-                    }
-                    return AnyView(EmptyView())
-                }
-            )
-            .onTapGesture {
-                onTap?()
-                if tapToDismiss {
-                    withAnimation(.spring()) {
-                        self.workItem?.cancel()
-                        isPresenting = false
-                        self.workItem = nil
-                    }
-                }
-            }
-            .onDisappear {
-                completion?()
-            }
-            .transition(
-                .move(edge: .top)
-                .combined(with: .opacity)
-            )
-    }
-    
-    @ViewBuilder private func mainBannerContent() -> some View {
-        alert()
-            .onTapGesture {
-                onTap?()
-                if tapToDismiss {
-                    withAnimation(.spring()) {
-                        self.workItem?.cancel()
-                        isPresenting = false
-                        self.workItem = nil
-                    }
-                }
-            }
-            .onDisappear {
-                completion?()
-            }
-            .transition(
-                alert().displayMode == .banner(.slide)
-                ? AnyTransition.slide.combined(with: .opacity)
-                : AnyTransition.move(edge: .bottom)
-            )
-    }
-    
     
     // MARK: - Actions
     

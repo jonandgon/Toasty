@@ -10,6 +10,8 @@ import Toasty
 
 struct ContentView: View {
     
+    @StateObject var toaster = Toaster.shared
+    
     @State var bannerPresented: Bool = false
     @State var hudPresented: Bool = false
     @State var alertPresented: Bool = false
@@ -26,9 +28,6 @@ struct ContentView: View {
             }
             .navigationTitle("Toast Demo")
         }
-        .toast(isPresenting: $bannerPresented, duration: 5) {
-            ToastBanner(type: .systemImage("bubbles.and.sparkles", Color(.systemTeal)), title: "Toasting it up", subtitle: "This notification is a toast banner", style: .none)
-        }
         .toast(isPresenting: $hudPresented, duration: 5) {
             ToastHUD(type: .error(Color(.systemRed)), title: "Error", subtitle: "Something went wrong.")
         }
@@ -39,7 +38,14 @@ struct ContentView: View {
     
     func bannerToggle() -> some View {
         Button {
-            bannerPresented.toggle()
+            let banner = ToastBanner(
+                type: .systemImage("bubbles.and.sparkles", Color(.systemTeal)),
+                title: "Toasting it up",
+                subtitle: "Notification \(UUID().uuidString)",
+                style: .none
+            )
+            toaster.addToQueue(banner, duration: 5)
+            // bannerPresented.toggle()
         } label: {
             HStack {
                 Spacer()

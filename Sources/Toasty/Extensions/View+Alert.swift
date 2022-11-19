@@ -40,6 +40,10 @@ public extension View {
         ))
     }
     
+    @ViewBuilder func toaster(_ queue: Toaster) -> some View {
+        modifier(ToastQueueModifier(queue))
+    }
+    
     /// Return a view with a maximum specific frame.
     ///
     /// Defaults to a maximum of frame of 175 x 175.
@@ -65,16 +69,6 @@ public extension View {
     ///
     internal func textColor(_ color: Color? = nil) -> some View {
         modifier(TextForegroundModifier(color: color))
-    }
-    
-    @ViewBuilder internal func valueChanged<T: Equatable>(value: T, onChange: @escaping (T) -> Void) -> some View {
-        if #available(iOS 14.0, *) {
-            self.onChange(of: value, perform: onChange)
-        } else {
-            self.onReceive(Just(value)) { (value) in
-                onChange(value)
-            }
-        }
     }
     
 }

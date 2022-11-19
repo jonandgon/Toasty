@@ -16,8 +16,7 @@ internal struct TextForegroundModifier: ViewModifier {
     
     var color: Color?
     
-    @ViewBuilder
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         if color != nil {
             content
                 .foregroundColor(color)
