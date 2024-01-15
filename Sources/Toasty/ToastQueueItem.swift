@@ -10,14 +10,14 @@ import Foundation
 
 public struct ToastQueueItem: Equatable, Identifiable {
     
-    public var id: Date
+    public var id: String
     public var toast: any Toast
     public var duration: TimeInterval
     public var allowsDismiss: Bool
     public var offsetY: CGFloat
     
     public init(toast: some Toast, duration: TimeInterval, allowsDismiss: Bool, offsetY: CGFloat) {
-        self.id = Date.now
+		self.id = UUID().uuidString;
         self.toast = toast
         self.duration = duration
         self.allowsDismiss = allowsDismiss
