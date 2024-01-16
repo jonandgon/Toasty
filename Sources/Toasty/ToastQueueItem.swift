@@ -32,8 +32,9 @@ public class ToastQueueItem: Equatable, Identifiable {
         
         let sameToastTitle = (lhs.toast.title == rhs.toast.title)
         let sameToastSubtitle = (lhs.toast.subtitle == rhs.toast.subtitle)
-        
-        return sameQueueParams && sameToastTitle && sameToastSubtitle
+		let sameToastId = (lhs.id == rhs.id)
+
+        return sameQueueParams && sameToastTitle && sameToastSubtitle && sameToastId
     }
     
 }
