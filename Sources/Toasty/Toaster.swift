@@ -47,7 +47,7 @@ public class Toaster: ObservableObject {
     private func setupObserving() {
         $queue
             .dropFirst()
-//            .removeDuplicates()
+            .removeDuplicates()
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self = self else { return }
@@ -57,7 +57,7 @@ public class Toaster: ObservableObject {
         
         $current
             .dropFirst()
-//            .removeDuplicates()
+            .removeDuplicates()
             .receive(on: RunLoop.main)
             .sink { [weak self] updatedCurrent in
                 guard let self = self else { return }
