@@ -8,8 +8,8 @@
 
 import Foundation
 
-public struct ToastQueueItem: Equatable, Identifiable {
-    
+public class ToastQueueItem: Equatable, Identifiable {
+
     public var id: String
     public var toast: any Toast
     public var duration: TimeInterval
