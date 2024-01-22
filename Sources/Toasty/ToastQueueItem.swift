@@ -36,5 +36,4 @@ public class ToastQueueItem: Equatable, Identifiable {
 
         return sameQueueParams && sameToastTitle && sameToastSubtitle && sameToastId
     }
-    
 }
